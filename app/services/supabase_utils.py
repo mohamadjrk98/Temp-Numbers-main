@@ -1,11 +1,10 @@
 # app/services/supabase_utils.py
 
 import time
-from app.config import Config
-from app.logger import logger
+from app.config import supabase, logger
 
-# إنشاء عميل Supabase عند الاستيراد
-supabase = Config.create_supabase()
+# supabase يتم استيراده مباشرة من config.py
+# فلا داعي لإنشاءه هنا، لأنه جاهز أصلاً عند التحميل
 
 # =========================
 # 🧩 المستخدمون
