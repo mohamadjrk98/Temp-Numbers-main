@@ -1,13 +1,9 @@
-# app/handlers/admin.py
 from telegram import Update, ReplyKeyboardMarkup, KeyboardButton
 from telegram.ext import ContextTypes
 from app.services import supabase_utils as db
 from app.messages import M
 from app.keyboards import kb_admin, kb_charge
-from app.config import Config
-from app.logger import logger
-
-ADMIN_ID = Config.ADMIN_ID
+from app.config import ADMIN_ID, logger  # ✅ هذا هو الصحيح
 
 async def admin_panel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
