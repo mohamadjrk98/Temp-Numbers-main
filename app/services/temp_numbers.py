@@ -1,21 +1,13 @@
 # app/services/temp_numbers.py
+
 import time
 import requests
 from urllib.parse import quote_plus
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update
 from telegram.ext import ContextTypes
-from app.config import BASE_URL, USERNAME, API_KEY, NUM_COUNT, SERIAL, logger  # ✅ التعديل هنا
+from app.config import BASE_URL, USERNAME, API_KEY, NUM_COUNT, SERIAL, logger  # ✅ هذا فقط
 from app.services import supabase_utils as db
 from app.messages import M
-from app.logger import logger
-
-# إعدادات أساسية
-BASE_URL = Config.BASE_URL
-USERNAME = Config.USERNAME
-API_KEY = Config.API_KEY
-NUM_COUNT = Config.NUM_COUNT
-SERIAL = Config.SERIAL
-
 
 async def buy_temp_phone(update: Update, context: ContextTypes.DEFAULT_TYPE, country_code: str, service_pid: str):
     """شراء رقم مؤقت لخدمة معينة من API الخارجي."""
