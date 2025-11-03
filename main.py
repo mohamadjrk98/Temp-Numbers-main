@@ -1,6 +1,8 @@
 import os
 import sys
 import logging
+import telegram
+print(f"📦 telegram version: {telegram.__version__}")
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, filters, ConversationHandler
 
 # ✅ التأكد من إمكانية استيراد مجلد app حتى لو شُغل من مكان مختلف
