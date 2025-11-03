@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: temp-numbers-bot
+    env: python
+    plan: free
+    buildCommand: |
+      pip install --upgrade pip
+      pip install --force-reinstall --no-cache-dir -r requirements.txt
+    startCommand: python main.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13
+      - key: PORT
+        value: 10000
