@@ -1,15 +1,10 @@
-
-# app/handlers/callbacks.py
 import time
 from telegram import Update
 from telegram.ext import ContextTypes
 from app.services import supabase_utils as db
 from app.services.temp_numbers import buy_temp_phone
 from app.messages import M
-from app.logger import logger
-from app.config import Config
-
-ADMIN_ID = Config.ADMIN_ID
+from app.config import ADMIN_ID, logger  # ✅ تم التعديل هنا
 
 async def admin_approval_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """موافقة أو رفض طلب شحن"""
@@ -35,6 +30,7 @@ async def admin_approval_callback(update: Update, context: ContextTypes.DEFAULT_
         user_id = req['user_id']
         amount = float(req['amount'])
         payment_type = req.get('payment_type', '')
+
         if action == 'approve':
             if "سيرياتيل" in payment_type:
                 rate = db.get_usd_rate()
@@ -50,11 +46,14 @@ async def admin_approval_callback(update: Update, context: ContextTypes.DEFAULT_
                 await db.update_user_balance(user_id, newv)
                 db.update_recharge_status(req_id, 'approved')
                 await context.bot.send_message(user_id, M()['approval_notification'].format(amount, newv))
+
             await q.edit_message_text((q.message.text or "") + "\n✅ تمت الموافقة.")
+
         elif action == 'reject':
             db.update_recharge_status(req_id, 'rejected')
             await context.bot.send_message(user_id, M()['rejection_notification'])
             await q.edit_message_text((q.message.text or "") + "\n❌ تم الرفض.")
+
     except Exception as e:
         logger.error(f"admin_approval_callback error: {e}")
         await q.edit_message_text(f"خطأ: {e}")
