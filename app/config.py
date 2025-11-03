@@ -1,37 +1,36 @@
-# app/config.py
 import os
+import logging
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
+# تحميل ملف البيئة (.env)
 load_dotenv()
 
-class Config:
-    # 🧠 Telegram & API credentials
-    USERNAME = os.getenv('USERNAME')
-    API_KEY = os.getenv('API_KEY')
-    BOT_TOKEN = os.getenv('BOT_TOKEN')
-    COUNTRY = os.getenv('COUNTRY', 'us')
-    NUM_COUNT = int(os.getenv('NUM_COUNT', 1))
-    SERIAL = int(os.getenv('SERIAL', 2))
-    ADMIN_ID = int(os.getenv('ADMIN_ID', 0))
+# متغيرات البيئة
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+API_KEY = os.getenv("API_KEY")
+USERNAME = os.getenv("USERNAME")
+PIDS = [pid.strip() for pid in os.getenv("PID", "").split(",") if pid.strip()]
+COUNTRY = os.getenv("COUNTRY", "us")
+NUM_COUNT = int(os.getenv("NUM_COUNT", 1))
+SERIAL = int(os.getenv("SERIAL", 2))
+ADMIN_ID = int(os.getenv("ADMIN_ID", 0))
 
-    # 🗄️ Supabase credentials
-    SUPABASE_URL = os.getenv('SUPABASE_URL')
-    SUPABASE_KEY = os.getenv('SUPABASE_KEY')
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
-    # 🌐 External API endpoint
-    BASE_URL = "https://api.durianrcs.com/out/ext_api"
+BASE_URL = "https://api.durianrcs.com/out/ext_api"
 
-    @staticmethod
-    def create_supabase() -> Client:
-        """إنشاء عميل Supabase."""
-        if not all([
-            Config.BOT_TOKEN, Config.USERNAME, Config.API_KEY,
-            Config.SUPABASE_URL, Config.SUPABASE_KEY, Config.ADMIN_ID
-        ]):
-            raise ValueError("❌ Missing required environment variables!")
+# إعداد اللوجر
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
-        try:
-            return create_client(Config.SUPABASE_URL, Config.SUPABASE_KEY)
-        except Exception as e:
-            raise RuntimeError(f"Failed to create Supabase client: {e}")
+# إنشاء عميل Supabase
+if SUPABASE_URL and SUPABASE_KEY:
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+else:
+    supabase = None
+    logger.warning("⚠️ Supabase credentials not found in environment variables.")
