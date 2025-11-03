@@ -2,6 +2,7 @@ python-telegram-bot==20.7
 requests==2.31.0
 python-dotenv==1.0.1
 bcrypt==4.1.2
-supabase==2.3.5
+supabase==2.4.0
+gotrue==2.4.2
 aiohttp==3.9.5
 asyncio==3.4.3
